@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Forex Trade GPT Advisor</title>
   <script defer>
     async function submitForexTrade(e) {
@@ -10,9 +10,8 @@
       const form = e.target;
       const data = {
         pair: form.pair.value,
-        entry_price: form.entry_price.value,
-        stop_loss: form.stop_loss.value,
-        take_profit: form.take_profit.value
+        timeframe: form.timeframe.value || "",
+        comment: form.comment.value || ""
       };
 
       document.getElementById('response').innerHTML = '<div class="text-blue-600">Evaluating...</div>';
@@ -50,12 +49,10 @@
     <h1 class="text-xl font-bold mb-4 text-center">Forex Trade GPT Advisor</h1>
     <form onsubmit="submitForexTrade(event)" class="space-y-4">
       <input name="pair" type="text" placeholder="Pair (e.g. EUR/USD)" class="w-full p-2 border rounded" required>
-      <input name="entry_price" type="text" placeholder="Entry Price" class="w-full p-2 border rounded" required>
-      <input name="stop_loss" type="text" placeholder="Stop Loss" class="w-full p-2 border rounded" required>
-      <input name="take_profit" type="text" placeholder="Take Profit" class="w-full p-2 border rounded" required>
-      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded w-full">Submit</button>
+      <input name="timeframe" type="text" placeholder="Timeframe (e.g. 1h, 4h, Daily)" class="w-full p-2 border rounded">
+      <textarea name="comment" placeholder="Optional trade notes or context..." rows="3" class="w-full p-2 border rounded"></textarea>
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded w-full">Get Advisory</button>
     </form>
-
     <div id="response" class="mt-6 bg-gray-50 p-4 border rounded text-gray-800"></div>
   </div>
 </body>
