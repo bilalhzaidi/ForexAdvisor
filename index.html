@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forex Trade GPT Advisor</title>
+  <script defer src="https://unpkg.com/htmx.org@1.9.5"></script>
+  <script defer>
+    async function submitForexTrade(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        pair: form.pair.value,
+        entry_price: form.entry_price.value,
+        stop_loss: form.stop_loss.value,
+        take_profit: form.take_profit.value
+      };
+
+      document.getElementById('response').innerHTML = '<div class="text-blue-600">Evaluating...</div>';
+
+      try {
+        const res = await fetch("https://bilal.app.n8n.cloud/webhook/forex-gpt", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+
+        if (result.error) {
+          document.getElementById('response').innerHTML = `<p class='text-red-500'>${result.error}</p>`;
+        } else {
+          document.getElementById('response').innerHTML = `
+            <div class='space-y-2 text-sm'>
+              <p><strong>Decision:</strong> ${result.decision}</p>
+              <p><strong>Trend:</strong> ${result.trend}</p>
+              <p><strong>Confidence:</strong> ${result.confidence_score}</p>
+              <p><strong>Adjustment:</strong> ${result.adjustments}</p>
+              <p><strong>Reward:Risk:</strong> ${result.reward_to_risk}</p>
+              <p><strong>Summary:</strong> <br><span class="whitespace-pre-line">${result.summary}</span></p>
+            </div>`;
+        }
+      } catch (err) {
+        document.getElementById('response').innerHTML = `<p class='text-red-500'>Failed to fetch advisory. Please check connection.</p>`;
+      }
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-4">
+  <div class="max-w-xl mx-auto bg-white p-6 shadow rounded">
+    <h1 class="text-xl font-bold mb-4 text-center">Forex Trade GPT Advisor</h1>
+    <form onsubmit="submitForexTrade(event)" class="space-y-4">
+      <input name="pair" type="text" placeholder="Pair (e.g. EUR/USD)" class="w-full p-2 border rounded" required>
+      <input name="entry_price" type="text" placeholder="Entry Price" class="w-full p-2 border rounded" required>
+      <input name="stop_loss" type="text" placeholder="Stop Loss" class="w-full p-2 border rounded" required>
+      <input name="take_profit" type="text" placeholder="Take Profit" class="w-full p-2 border rounded" required>
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded w-full">Submit</button>
+    </form>
+
+    <div id="response" class="mt-6 bg-gray-50 p-4 border rounded text-gray-800"></div>
+  </div>
+</body>
+</html>
