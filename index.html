@@ -3,18 +3,657 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Forex Trade GPT Advisor</title>
-  <script defer>
+  <title>Forex Trade GPT Advisor | Professional Trading Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      padding: 1.5rem 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    
+    .logo h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    
+    .logo p {
+      font-size: 0.875rem;
+      opacity: 0.9;
+    }
+    
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      background: rgba(255,255,255,0.2);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+    }
+    
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #4ade80;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 2rem;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      transition: box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    }
+    
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+    }
+    
+    .card h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1a202c;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #4a5568;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: #f8fafc;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234a5568' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+    }
+    
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 0.875rem 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    .tips-box {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: #f0f4ff;
+      border-left: 4px solid #667eea;
+      border-radius: 8px;
+    }
+    
+    .tips-box h3 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #4c51bf;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .tips-box ul {
+      list-style: none;
+      font-size: 0.813rem;
+      color: #5a67d8;
+    }
+    
+    .tips-box li {
+      padding-left: 1rem;
+      margin-bottom: 0.25rem;
+      position: relative;
+    }
+    
+    .tips-box li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+    }
+    
+    .results-welcome {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #718096;
+    }
+    
+    .results-welcome-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.3;
+    }
+    
+    .results-welcome h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #4a5568;
+    }
+    
+    .results-content {
+      animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 1.5rem;
+    }
+    
+    .results-pair {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a202c;
+    }
+    
+    .results-timeframe {
+      font-size: 0.875rem;
+      color: #718096;
+    }
+    
+    .results-timestamp {
+      font-size: 0.813rem;
+      color: #a0aec0;
+    }
+    
+    .recommendation-card {
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: transform 0.3s ease;
+    }
+    
+    .recommendation-card:hover {
+      transform: translateX(5px);
+    }
+    
+    .recommendation-card.buy {
+      background: #d1fae5;
+      border: 1px solid #6ee7b7;
+    }
+    
+    .recommendation-card.sell {
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+    }
+    
+    .recommendation-card.hold {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+    }
+    
+    .recommendation-icon {
+      font-size: 2rem;
+    }
+    
+    .recommendation-card.buy .recommendation-icon { color: #059669; }
+    .recommendation-card.sell .recommendation-icon { color: #dc2626; }
+    .recommendation-card.hold .recommendation-icon { color: #d97706; }
+    
+    .recommendation-text {
+      flex: 1;
+    }
+    
+    .recommendation-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      opacity: 0.8;
+      margin-bottom: 0.25rem;
+    }
+    
+    .recommendation-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .metric-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1.25rem;
+      transition: all 0.3s ease;
+    }
+    
+    .metric-card:hover {
+      background: white;
+      border-color: #cbd5e0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    .metric-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .metric-label {
+      font-size: 0.813rem;
+      color: #718096;
+      font-weight: 500;
+    }
+    
+    .metric-icon {
+      font-size: 1.25rem;
+      opacity: 0.5;
+    }
+    
+    .metric-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a202c;
+    }
+    
+    .confidence-bar {
+      margin-top: 0.5rem;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    
+    .confidence-fill {
+      height: 100%;
+      transition: width 1s ease;
+    }
+    
+    .confidence-fill.high { background: #4ade80; }
+    .confidence-fill.medium { background: #fbbf24; }
+    .confidence-fill.low { background: #f87171; }
+    
+    .info-box {
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    
+    .info-box.adjustments {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+    }
+    
+    .info-box.reasoning {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .info-box-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .info-box.adjustments .info-box-header { color: #1d4ed8; }
+    .info-box.reasoning .info-box-header { color: #374151; }
+    
+    .info-box-content {
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    
+    .info-box.adjustments .info-box-content { color: #1e40af; }
+    .info-box.reasoning .info-box-content { color: #4b5563; }
+    
+    .disclaimer {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-radius: 8px;
+      font-size: 0.813rem;
+      color: #92400e;
+    }
+    
+    .disclaimer strong {
+      font-weight: 600;
+    }
+    
+    .loader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 4rem;
+    }
+    
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #e2e8f0;
+      border-top-color: #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .error-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: #991b1b;
+    }
+    
+    .error-icon {
+      font-size: 1.25rem;
+      color: #dc2626;
+    }
+    
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+      
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <div class="logo-icon">📈</div>
+        <div>
+          <h1>Forex Trade GPT Advisor</h1>
+          <p>AI-Powered Trading Analysis</p>
+        </div>
+      </div>
+      <div class="status">
+        <div class="status-dot"></div>
+        <span>System Active</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div class="grid">
+      <!-- Left Panel - Trade Input -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">➕</div>
+          <h2>New Trade Analysis</h2>
+        </div>
+        
+        <form id="tradeForm" onsubmit="submitForexTrade(event)">
+          <!-- Currency Pair Input -->
+          <div class="form-group">
+            <label class="form-label" for="pair">Currency Pair</label>
+            <input 
+              id="pair"
+              name="pair" 
+              type="text" 
+              placeholder="e.g. EUR/USD, GBP/JPY"
+              class="form-input"
+              required
+            >
+          </div>
+
+          <!-- Timeframe Select -->
+          <div class="form-group">
+            <label class="form-label" for="timeframe">Timeframe</label>
+            <select 
+              id="timeframe"
+              name="timeframe" 
+              class="form-input form-select"
+            >
+              <option value="">All Timeframes</option>
+              <option value="1m">1 Minute</option>
+              <option value="5m">5 Minutes</option>
+              <option value="15m">15 Minutes</option>
+              <option value="30m">30 Minutes</option>
+              <option value="1h">1 Hour</option>
+              <option value="4h">4 Hours</option>
+              <option value="Daily">Daily</option>
+              <option value="Weekly">Weekly</option>
+              <option value="Monthly">Monthly</option>
+            </select>
+          </div>
+
+          <!-- Comments -->
+          <div class="form-group">
+            <label class="form-label" for="comment">Trade Notes / Context (Optional)</label>
+            <textarea 
+              id="comment"
+              name="comment" 
+              placeholder="Add any relevant market context, analysis, or notes..."
+              class="form-input form-textarea"
+            ></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn">
+            <span class="btn-text">🤖 Get AI Analysis</span>
+            <span class="btn-loader" style="display: none;">⏳ Analyzing...</span>
+          </button>
+        </form>
+
+        <!-- Quick Tips -->
+        <div class="tips-box">
+          <h3>💡 Quick Tips</h3>
+          <ul>
+            <li>Use standard forex pair notation (EUR/USD, GBP/JPY)</li>
+            <li>Include relevant market context in notes</li>
+            <li>Specify timeframe for more accurate analysis</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Right Panel - Analysis Results -->
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">📊</div>
+            <h2>Analysis Results</h2>
+          </div>
+          
+          <div id="response">
+            <!-- Welcome State -->
+            <div class="results-welcome">
+              <div class="results-welcome-icon">📈</div>
+              <h3>Ready to Analyze</h3>
+              <p>Enter a currency pair and optional parameters to receive AI-powered trading insights and recommendations.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+          ⚠️ <strong>Disclaimer:</strong> This AI advisory is for informational purposes only. Always conduct your own research and consider consulting with a financial advisor before making trading decisions.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
     async function submitForexTrade(e) {
       e.preventDefault();
       const form = e.target;
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const btnText = submitBtn.querySelector('.btn-text');
+      const btnLoader = submitBtn.querySelector('.btn-loader');
+      
       const data = {
         pair: form.pair.value,
         timeframe: form.timeframe.value || "",
         comment: form.comment.value || ""
       };
 
-      document.getElementById('response').innerHTML = '<div class="text-blue-600">Evaluating...</div>';
+      // Show loading state
+      submitBtn.disabled = true;
+      btnText.style.display = 'none';
+      btnLoader.style.display = 'flex';
+      
+      document.getElementById('response').innerHTML = `
+        <div class="loader">
+          <div class="spinner"></div>
+        </div>
+      `;
 
       try {
         const res = await fetch("https://bilalz.app.n8n.cloud/webhook/forex-gpt", {
@@ -25,36 +664,125 @@
         const result = await res.json();
 
         if (result.error) {
-          document.getElementById('response').innerHTML = `<p class='text-red-500'>${result.error}</p>`;
+          document.getElementById('response').innerHTML = `
+            <div class="error-box">
+              <span class="error-icon">❌</span>
+              <div>
+                <strong>Error</strong><br>
+                ${result.error}
+              </div>
+            </div>
+          `;
         } else {
+          // Determine recommendation styling
+          let recClass = 'hold';
+          let recIcon = '⏸️';
+          
+          const rec = (result.recommendation || '').toLowerCase();
+          if (rec.includes('buy')) {
+            recClass = 'buy';
+            recIcon = '📈';
+          } else if (rec.includes('sell')) {
+            recClass = 'sell';
+            recIcon = '📉';
+          }
+
+          // Parse confidence for progress bar
+          const confidence = parseFloat(result.confidence_score) || 0;
+          let confClass = 'low';
+          if (confidence >= 70) confClass = 'high';
+          else if (confidence >= 40) confClass = 'medium';
+
           const html = `
-            <div class='space-y-2 text-sm'>
-              <p><strong>Recommendation:</strong> ${result.recommendation || 'N/A'}</p>
-              <p><strong>Trend:</strong> ${result.trend || 'N/A'}</p>
-              <p><strong>Confidence:</strong> ${result.confidence_score || 'N/A'}</p>
-              <p><strong>Adjustment:</strong> ${result.adjustments || 'N/A'}</p>
-              <p><strong>Reward:Risk:</strong> ${result.reward_to_risk || 'N/A'}</p>
-              <p><strong>Reasoning:</strong> <br><span class="whitespace-pre-line">${result.reasoning || 'N/A'}</span></p>
-            </div>`;
+            <div class="results-content">
+              <!-- Header -->
+              <div class="results-header">
+                <div>
+                  <div class="results-pair">${data.pair.toUpperCase()}</div>
+                  <div class="results-timeframe">${data.timeframe || 'All Timeframes'}</div>
+                </div>
+                <div class="results-timestamp">${new Date().toLocaleString()}</div>
+              </div>
+
+              <!-- Recommendation -->
+              <div class="recommendation-card ${recClass}">
+                <div class="recommendation-icon">${recIcon}</div>
+                <div class="recommendation-text">
+                  <div class="recommendation-label">Recommendation</div>
+                  <div class="recommendation-value">${result.recommendation || 'N/A'}</div>
+                </div>
+              </div>
+
+              <!-- Metrics -->
+              <div class="metrics-grid">
+                <div class="metric-card">
+                  <div class="metric-header">
+                    <span class="metric-label">Trend</span>
+                    <span class="metric-icon">📊</span>
+                  </div>
+                  <div class="metric-value">${result.trend || 'N/A'}</div>
+                </div>
+
+                <div class="metric-card">
+                  <div class="metric-header">
+                    <span class="metric-label">Confidence</span>
+                    <span class="metric-icon">🛡️</span>
+                  </div>
+                  <div class="metric-value">${result.confidence_score || 'N/A'}</div>
+                  ${confidence > 0 ? `
+                  <div class="confidence-bar">
+                    <div class="confidence-fill ${confClass}" style="width: ${confidence}%"></div>
+                  </div>
+                  ` : ''}
+                </div>
+
+                <div class="metric-card">
+                  <div class="metric-header">
+                    <span class="metric-label">Reward:Risk</span>
+                    <span class="metric-icon">⚖️</span>
+                  </div>
+                  <div class="metric-value">${result.reward_to_risk || 'N/A'}</div>
+                </div>
+              </div>
+
+              <!-- Adjustments -->
+              ${result.adjustments ? `
+              <div class="info-box adjustments">
+                <div class="info-box-header">
+                  💡 Suggested Adjustments
+                </div>
+                <div class="info-box-content">${result.adjustments}</div>
+              </div>
+              ` : ''}
+
+              <!-- Reasoning -->
+              <div class="info-box reasoning">
+                <div class="info-box-header">
+                  🧠 Analysis & Reasoning
+                </div>
+                <div class="info-box-content">${result.reasoning || 'No detailed reasoning provided.'}</div>
+              </div>
+            </div>
+          `;
           document.getElementById('response').innerHTML = html;
         }
       } catch (err) {
-        document.getElementById('response').innerHTML = `<p class='text-red-500'>Failed to fetch advisory. Please check connection.</p>`;
+        document.getElementById('response').innerHTML = `
+          <div class="error-box">
+            <span class="error-icon">🔌</span>
+            <div>
+              <strong>Connection Error</strong><br>
+              Failed to fetch advisory. Please check your connection and try again.
+            </div>
+          </div>
+        `;
+      } finally {
+        // Reset button state
+        submitBtn.disabled = false;
+        btnText.style.display = 'flex';
+        btnLoader.style.display = 'none';
       }
     }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 min-h-screen p-4">
-  <div class="max-w-xl mx-auto bg-white p-6 shadow rounded">
-    <h1 class="text-xl font-bold mb-4 text-center">Forex Trade GPT Advisor</h1>
-    <form onsubmit="submitForexTrade(event)" class="space-y-4">
-      <input name="pair" type="text" placeholder="Pair (e.g. EUR/USD)" class="w-full p-2 border rounded" required>
-      <input name="timeframe" type="text" placeholder="Timeframe (e.g. 1h, 4h, Daily)" class="w-full p-2 border rounded">
-      <textarea name="comment" placeholder="Optional trade notes or context..." rows="3" class="w-full p-2 border rounded"></textarea>
-      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded w-full">Get Advisory</button>
-    </form>
-    <div id="response" class="mt-6 bg-gray-50 p-4 border rounded text-gray-800"></div>
-  </div>
 </body>
 </html>
