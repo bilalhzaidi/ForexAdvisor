@@ -173,6 +173,19 @@
       padding-right: 2.5rem;
     }
     
+    .currency-pair-selector {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    
+    .currency-separator {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: #718096;
+    }
+    
     .form-textarea {
       resize: vertical;
       min-height: 100px;
@@ -509,6 +522,15 @@
       .metrics-grid {
         grid-template-columns: 1fr;
       }
+      
+      .currency-pair-selector {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .currency-separator {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -541,17 +563,67 @@
         </div>
         
         <form id="tradeForm" onsubmit="submitForexTrade(event)">
-          <!-- Currency Pair Input -->
+          <!-- Currency Pair Selector -->
           <div class="form-group">
-            <label class="form-label" for="pair">Currency Pair</label>
-            <input 
-              id="pair"
-              name="pair" 
-              type="text" 
-              placeholder="e.g. EUR/USD, GBP/JPY"
-              class="form-input"
-              required
-            >
+            <label class="form-label">Currency Pair</label>
+            <div class="currency-pair-selector">
+              <select 
+                id="fromCurrency"
+                name="fromCurrency" 
+                class="form-input form-select"
+                required
+              >
+                <option value="">Base Currency</option>
+                <option value="EUR">EUR - Euro</option>
+                <option value="USD">USD - US Dollar</option>
+                <option value="GBP">GBP - British Pound</option>
+                <option value="JPY">JPY - Japanese Yen</option>
+                <option value="CHF">CHF - Swiss Franc</option>
+                <option value="AUD">AUD - Australian Dollar</option>
+                <option value="CAD">CAD - Canadian Dollar</option>
+                <option value="NZD">NZD - New Zealand Dollar</option>
+                <option value="CNY">CNY - Chinese Yuan</option>
+                <option value="INR">INR - Indian Rupee</option>
+                <option value="SGD">SGD - Singapore Dollar</option>
+                <option value="HKD">HKD - Hong Kong Dollar</option>
+              </select>
+              
+              <span class="currency-separator">/</span>
+              
+              <select 
+                id="toCurrency"
+                name="toCurrency" 
+                class="form-input form-select"
+                required
+              >
+                <option value="">Quote Currency</option>
+                <option value="USD">USD - US Dollar</option>
+                <option value="EUR">EUR - Euro</option>
+                <option value="GBP">GBP - British Pound</option>
+                <option value="JPY">JPY - Japanese Yen</option>
+                <option value="CHF">CHF - Swiss Franc</option>
+                <option value="AUD">AUD - Australian Dollar</option>
+                <option value="CAD">CAD - Canadian Dollar</option>
+                <option value="NZD">NZD - New Zealand Dollar</option>
+                <option value="CNY">CNY - Chinese Yuan</option>
+                <option value="INR">INR - Indian Rupee</option>
+                <option value="SGD">SGD - Singapore Dollar</option>
+                <option value="HKD">HKD - Hong Kong Dollar</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Popular Pairs Quick Select -->
+          <div class="form-group">
+            <label class="form-label">Quick Select Popular Pairs</label>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+              <button type="button" class="quick-pair-btn" onclick="selectPair('EUR', 'USD')" style="padding: 0.5rem; background: #f0f4ff; border: 1px solid #667eea; border-radius: 6px; cursor: pointer; font-size: 0.813rem;">EUR/USD</button>
+              <button type="button" class="quick-pair-btn" onclick="selectPair('GBP', 'USD')" style="padding: 0.5rem; background: #f0f4ff; border: 1px solid #667eea; border-radius: 6px; cursor: pointer; font-size: 0.813rem;">GBP/USD</button>
+              <button type="button" class="quick-pair-btn" onclick="selectPair('USD', 'JPY')" style="padding: 0.5rem; background: #f0f4ff; border: 1px solid #667eea; border-radius: 6px; cursor: pointer; font-size: 0.813rem;">USD/JPY</button>
+              <button type="button" class="quick-pair-btn" onclick="selectPair('USD', 'CHF')" style="padding: 0.5rem; background: #f0f4ff; border: 1px solid #667eea; border-radius: 6px; cursor: pointer; font-size: 0.813rem;">USD/CHF</button>
+              <button type="button" class="quick-pair-btn" onclick="selectPair('AUD', 'USD')" style="padding: 0.5rem; background: #f0f4ff; border: 1px solid #667eea; border-radius: 6px; cursor: pointer; font-size: 0.813rem;">AUD/USD</button>
+              <button type="button" class="quick-pair-btn" onclick="selectPair('USD', 'CAD')" style="padding: 0.5rem; background: #f0f4ff; border: 1px solid #667eea; border-radius: 6px; cursor: pointer; font-size: 0.813rem;">USD/CAD</button>
+            </div>
           </div>
 
           <!-- Timeframe Select -->
@@ -562,12 +634,11 @@
               name="timeframe" 
               class="form-input form-select"
             >
-              <option value="">All Timeframes</option>
               <option value="1m">1 Minute</option>
               <option value="5m">5 Minutes</option>
               <option value="15m">15 Minutes</option>
               <option value="30m">30 Minutes</option>
-              <option value="1h">1 Hour</option>
+              <option value="1h" selected>1 Hour</option>
               <option value="4h">4 Hours</option>
               <option value="Daily">Daily</option>
               <option value="Weekly">Weekly</option>
@@ -597,9 +668,10 @@
         <div class="tips-box">
           <h3>💡 Quick Tips</h3>
           <ul>
-            <li>Use standard forex pair notation (EUR/USD, GBP/JPY)</li>
+            <li>Select base and quote currencies from the dropdowns</li>
+            <li>Use quick select buttons for popular pairs</li>
             <li>Include relevant market context in notes</li>
-            <li>Specify timeframe for more accurate analysis</li>
+            <li>Choose appropriate timeframe for your strategy</li>
           </ul>
         </div>
       </div>
@@ -617,7 +689,7 @@
             <div class="results-welcome">
               <div class="results-welcome-icon">📈</div>
               <h3>Ready to Analyze</h3>
-              <p>Enter a currency pair and optional parameters to receive AI-powered trading insights and recommendations.</p>
+              <p>Select a currency pair and timeframe to receive AI-powered trading insights and recommendations.</p>
             </div>
           </div>
         </div>
@@ -631,6 +703,24 @@
   </main>
 
   <script>
+    // Quick pair selection
+    function selectPair(from, to) {
+      document.getElementById('fromCurrency').value = from;
+      document.getElementById('toCurrency').value = to;
+      
+      // Visual feedback
+      const buttons = document.querySelectorAll('.quick-pair-btn');
+      buttons.forEach(btn => {
+        if (btn.textContent === `${from}/${to}`) {
+          btn.style.background = '#667eea';
+          btn.style.color = 'white';
+        } else {
+          btn.style.background = '#f0f4ff';
+          btn.style.color = 'black';
+        }
+      });
+    }
+
     async function submitForexTrade(e) {
       e.preventDefault();
       const form = e.target;
@@ -638,9 +728,23 @@
       const btnText = submitBtn.querySelector('.btn-text');
       const btnLoader = submitBtn.querySelector('.btn-loader');
       
+      // Get currency pair
+      const fromCurrency = form.fromCurrency.value;
+      const toCurrency = form.toCurrency.value;
+      
+      if (!fromCurrency || !toCurrency) {
+        alert('Please select both base and quote currencies');
+        return;
+      }
+      
+      if (fromCurrency === toCurrency) {
+        alert('Base and quote currencies must be different');
+        return;
+      }
+      
       const data = {
-        pair: form.pair.value,
-        timeframe: form.timeframe.value || "",
+        pair: `${fromCurrency}/${toCurrency}`,
+        timeframe: form.timeframe.value || "1h",
         comment: form.comment.value || ""
       };
 
@@ -661,6 +765,11 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data)
         });
+        
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        
         const result = await res.json();
 
         if (result.error) {
@@ -688,7 +797,8 @@
           }
 
           // Parse confidence for progress bar
-          const confidence = parseFloat(result.confidence_score) || 0;
+          const confidenceText = result.confidence_score || '0%';
+          const confidence = parseFloat(confidenceText) || 0;
           let confClass = 'low';
           if (confidence >= 70) confClass = 'high';
           else if (confidence >= 40) confClass = 'medium';
@@ -699,7 +809,7 @@
               <div class="results-header">
                 <div>
                   <div class="results-pair">${data.pair.toUpperCase()}</div>
-                  <div class="results-timeframe">${data.timeframe || 'All Timeframes'}</div>
+                  <div class="results-timeframe">${data.timeframe}</div>
                 </div>
                 <div class="results-timestamp">${new Date().toLocaleString()}</div>
               </div>
@@ -746,7 +856,7 @@
               </div>
 
               <!-- Adjustments -->
-              ${result.adjustments ? `
+              ${result.adjustments && result.adjustments !== 'N/A' ? `
               <div class="info-box adjustments">
                 <div class="info-box-header">
                   💡 Suggested Adjustments
@@ -767,12 +877,14 @@
           document.getElementById('response').innerHTML = html;
         }
       } catch (err) {
+        console.error('Error:', err);
         document.getElementById('response').innerHTML = `
           <div class="error-box">
             <span class="error-icon">🔌</span>
             <div>
               <strong>Connection Error</strong><br>
-              Failed to fetch advisory. Please check your connection and try again.
+              Failed to connect to the analysis service. Please check if the service is running and try again.<br>
+              <small>Error: ${err.message}</small>
             </div>
           </div>
         `;
@@ -783,6 +895,21 @@
         btnLoader.style.display = 'none';
       }
     }
+
+    // Prevent selecting same currency for both
+    document.getElementById('fromCurrency').addEventListener('change', function() {
+      const toCurrency = document.getElementById('toCurrency');
+      if (this.value && this.value === toCurrency.value) {
+        toCurrency.value = '';
+      }
+    });
+
+    document.getElementById('toCurrency').addEventListener('change', function() {
+      const fromCurrency = document.getElementById('fromCurrency');
+      if (this.value && this.value === fromCurrency.value) {
+        fromCurrency.value = '';
+      }
+    });
   </script>
 </body>
 </html>
