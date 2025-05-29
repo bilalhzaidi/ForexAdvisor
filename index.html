@@ -191,6 +191,29 @@
       min-height: 100px;
     }
     
+    .quick-pair-btn {
+      padding: 0.5rem;
+      background: #f0f4ff;
+      border: 1px solid #667eea;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.813rem;
+      color: #667eea;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    .quick-pair-btn:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+    }
+    
+    .quick-pair-btn:active {
+      transform: translateY(0);
+    }
+    
     .btn {
       width: 100%;
       padding: 0.875rem 1.5rem;
@@ -508,6 +531,20 @@
       color: #dc2626;
     }
     
+    .cors-info {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      font-size: 0.813rem;
+      color: #1d4ed8;
+    }
+    
+    .cors-info strong {
+      font-weight: 600;
+    }
+    
     @media (max-width: 768px) {
       .grid {
         grid-template-columns: 1fr;
@@ -617,12 +654,12 @@
           <div class="form-group">
             <label class="form-label">Quick Select Popular Pairs</label>
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
-              <button type="button" class="quick-pair-btn" onclick="selectPair('EUR', 'USD')" style="padding: 0.5rem; background: #f0f4ff; border: 1px solid #667eea; border-radius: 6px; cursor: pointer; font-size: 0.813rem;">EUR/USD</button>
-              <button type="button" class="quick-pair-btn" onclick="selectPair('GBP', 'USD')" style="padding: 0.5rem; background: #f0f4ff; border: 1px solid #667eea; border-radius: 6px; cursor: pointer; font-size: 0.813rem;">GBP/USD</button>
-              <button type="button" class="quick-pair-btn" onclick="selectPair('USD', 'JPY')" style="padding: 0.5rem; background: #f0f4ff; border: 1px solid #667eea; border-radius: 6px; cursor: pointer; font-size: 0.813rem;">USD/JPY</button>
-              <button type="button" class="quick-pair-btn" onclick="selectPair('USD', 'CHF')" style="padding: 0.5rem; background: #f0f4ff; border: 1px solid #667eea; border-radius: 6px; cursor: pointer; font-size: 0.813rem;">USD/CHF</button>
-              <button type="button" class="quick-pair-btn" onclick="selectPair('AUD', 'USD')" style="padding: 0.5rem; background: #f0f4ff; border: 1px solid #667eea; border-radius: 6px; cursor: pointer; font-size: 0.813rem;">AUD/USD</button>
-              <button type="button" class="quick-pair-btn" onclick="selectPair('USD', 'CAD')" style="padding: 0.5rem; background: #f0f4ff; border: 1px solid #667eea; border-radius: 6px; cursor: pointer; font-size: 0.813rem;">USD/CAD</button>
+              <button type="button" class="quick-pair-btn" onclick="selectPair('EUR', 'USD')">EUR/USD</button>
+              <button type="button" class="quick-pair-btn" onclick="selectPair('GBP', 'USD')">GBP/USD</button>
+              <button type="button" class="quick-pair-btn" onclick="selectPair('USD', 'JPY')">USD/JPY</button>
+              <button type="button" class="quick-pair-btn" onclick="selectPair('USD', 'CHF')">USD/CHF</button>
+              <button type="button" class="quick-pair-btn" onclick="selectPair('AUD', 'USD')">AUD/USD</button>
+              <button type="button" class="quick-pair-btn" onclick="selectPair('USD', 'CAD')">USD/CAD</button>
             </div>
           </div>
 
@@ -642,7 +679,6 @@
               <option value="4h">4 Hours</option>
               <option value="Daily">Daily</option>
               <option value="Weekly">Weekly</option>
-              <option value="Monthly">Monthly</option>
             </select>
           </div>
 
@@ -694,6 +730,16 @@
           </div>
         </div>
 
+        <!-- CORS Information -->
+        <div class="cors-info" id="corsInfo" style="display: none;">
+          <strong>Connection Issue Detected:</strong> If you're seeing connection errors, the n8n webhook might need CORS configuration. 
+          <br><br>
+          <strong>Solution:</strong> In your n8n workflow, add a "Respond to Webhook" node with these headers:
+          <br>• Access-Control-Allow-Origin: *
+          <br>• Access-Control-Allow-Methods: POST, OPTIONS
+          <br>• Access-Control-Allow-Headers: Content-Type
+        </div>
+
         <!-- Disclaimer -->
         <div class="disclaimer">
           ⚠️ <strong>Disclaimer:</strong> This AI advisory is for informational purposes only. Always conduct your own research and consider consulting with a financial advisor before making trading decisions.
@@ -702,7 +748,7 @@
     </div>
   </main>
 
-<script>
+  <script>
     // Quick pair selection
     function selectPair(from, to) {
       document.getElementById('fromCurrency').value = from;
@@ -716,7 +762,7 @@
           btn.style.color = 'white';
         } else {
           btn.style.background = '#f0f4ff';
-          btn.style.color = 'black';
+          btn.style.color = '#667eea';
         }
       });
     }
@@ -727,6 +773,7 @@
       const submitBtn = form.querySelector('button[type="submit"]');
       const btnText = submitBtn.querySelector('.btn-text');
       const btnLoader = submitBtn.querySelector('.btn-loader');
+      const corsInfo = document.getElementById('corsInfo');
       
       // Get currency pair
       const fromCurrency = form.fromCurrency.value;
@@ -752,6 +799,7 @@
       submitBtn.disabled = true;
       btnText.style.display = 'none';
       btnLoader.style.display = 'flex';
+      corsInfo.style.display = 'none';
       
       document.getElementById('response').innerHTML = `
         <div class="loader">
@@ -762,7 +810,9 @@
       try {
         const res = await fetch("https://bilalz.app.n8n.cloud/webhook/8e9e17c9-e733-4af3-9a37-45fe0e2fdbd8/forex-gpt", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json"
+          },
           body: JSON.stringify(data)
         });
         
@@ -837,79 +887,3 @@
                   <div class="metric-header">
                     <span class="metric-label">Confidence</span>
                     <span class="metric-icon">🛡️</span>
-                  </div>
-                  <div class="metric-value">${result.confidence_score || 'N/A'}</div>
-                  ${confidence > 0 ? `
-                  <div class="confidence-bar">
-                    <div class="confidence-fill ${confClass}" style="width: ${confidence}%"></div>
-                  </div>
-                  ` : ''}
-                </div>
-
-                <div class="metric-card">
-                  <div class="metric-header">
-                    <span class="metric-label">Reward:Risk</span>
-                    <span class="metric-icon">⚖️</span>
-                  </div>
-                  <div class="metric-value">${result.reward_to_risk || 'N/A'}</div>
-                </div>
-              </div>
-
-              <!-- Adjustments -->
-              ${result.adjustments && result.adjustments !== 'N/A' ? `
-              <div class="info-box adjustments">
-                <div class="info-box-header">
-                  💡 Suggested Adjustments
-                </div>
-                <div class="info-box-content">${result.adjustments}</div>
-              </div>
-              ` : ''}
-
-              <!-- Reasoning -->
-              <div class="info-box reasoning">
-                <div class="info-box-header">
-                  🧠 Analysis & Reasoning
-                </div>
-                <div class="info-box-content">${result.reasoning || 'No detailed reasoning provided.'}</div>
-              </div>
-            </div>
-          `;
-          document.getElementById('response').innerHTML = html;
-        }
-      } catch (err) {
-        console.error('Error:', err);
-        document.getElementById('response').innerHTML = `
-          <div class="error-box">
-            <span class="error-icon">🔌</span>
-            <div>
-              <strong>Connection Error</strong><br>
-              Failed to connect to the analysis service. Please check if the service is running and try again.<br>
-              <small>Error: ${err.message}</small>
-            </div>
-          </div>
-        `;
-      } finally {
-        // Reset button state
-        submitBtn.disabled = false;
-        btnText.style.display = 'flex';
-        btnLoader.style.display = 'none';
-      }
-    }
-
-    // Prevent selecting same currency for both
-    document.getElementById('fromCurrency').addEventListener('change', function() {
-      const toCurrency = document.getElementById('toCurrency');
-      if (this.value && this.value === toCurrency.value) {
-        toCurrency.value = '';
-      }
-    });
-
-    document.getElementById('toCurrency').addEventListener('change', function() {
-      const fromCurrency = document.getElementById('fromCurrency');
-      if (this.value && this.value === fromCurrency.value) {
-        fromCurrency.value = '';
-      }
-    });
-  </script>
-</body>
-</html>
