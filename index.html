@@ -719,9 +719,11 @@
           btn.style.color = 'black';
         }
       });
-      const res = await fetch("https://bilalz.app.n8n.cloud/webhook/8e9e17c9-e733-4af3-9a37-45fe0e2fdbd8/forex-gpt", {
-    }
-
+     const res = await fetch("https://bilalz.app.n8n.cloud/webhook/8e9e17c9-e733-4af3-9a37-45fe0e2fdbd8/forex-gpt", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(data)
+});
     async function submitForexTrade(e) {
       e.preventDefault();
       const form = e.target;
